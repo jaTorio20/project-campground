@@ -2,7 +2,7 @@
 <div class="row">
     <h1 class="text-center">New Campground</h1>
     <div class="col-6 offset-3">
-        <form action="/campgrounds" method="POST" novalidate class="validated-form">
+        <form action="/campgrounds" method="POST" novalidate class="validated-form" enctype="multipart/form-data">
             <div class="mb-3">
                 <label class="form-label" for="title">Title</label>
                 <input class="form-control" type="text" id="title" name="campground[title]" required>
@@ -23,7 +23,10 @@
                     Looks good!
                     </div>
             </div>
-            <div class="mb-3">
+            <!-- multiple meaning can upload multiple file -->
+
+            <!-- <input type="file" name="image" id="" multiple>   -->
+            <!-- <div class="mb-3">
                 <label class="form-label" for="image">Image Url</label>
                 <input class="form-control" type="text" id="image" name="campground[image]" required>
                     <div class="invalid-feedback">
@@ -32,7 +35,8 @@
                     <div class="valid-feedback">
                     Looks good!
                     </div>            
-            </div>
+            </div> -->
+
             <div class="mb-3">
                 <label class="form-label" for="price">Campground Price</label>
                 <div class="input-group">
@@ -59,7 +63,13 @@
                     </div>            
             </div>
             <div class="mb-3">
-                <button class="btn btn-success">Add Campground</button>
+                <label for="image" class="form-label">Upload Images</label>
+                <input class="form-control" type="file" id="image" name="image" multiple>
+                <!-- <div id="filePreview" class="d-flex flex-column gap-2"></div> -->
+            </div>
+
+            <div class="mb-3">
+                <button class="btn btn-success" type="submit">Add Campground</button>
             </div>
         </form>
         <a href="/campgrounds">All Campgrounds</a>
