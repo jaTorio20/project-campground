@@ -5,11 +5,7 @@ const catchAsync = require('../utils/catchAsync');
 // const Review = require('./models/review');
 const campgrounds = require('../controllers/campgrounds');
 const {isLoggedIn, validateCampground, isAuthor} = require('../middleware');
-const multer  = require('multer');
-const {storage} = require('../cloudinary');//automatically look for index.js file in cloudinary folder
-const upload = multer({ storage});
-// const upload = multer({ dest: 'uploads/' }); //dest meaning destination local folder only
-
+const upload = require('../middleware/upload');
 router.route('/')
   .get(catchAsync(campgrounds.index))
   .post(isLoggedIn, upload.array('image'), validateCampground, catchAsync(campgrounds.createCampground))

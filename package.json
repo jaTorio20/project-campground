@@ -15,7 +15,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "@fluidjs/multer-cloudinary": "^1.0.4",
+    "@mapbox/mapbox-sdk": "^0.16.2",
     "cloudinary": "^2.7.0",
     "connect-flash": "^0.1.1",
     "dotenv": "^17.2.3",
