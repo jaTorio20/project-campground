@@ -13,6 +13,7 @@ ImageSchema.virtual('thumbnail').get(function(){
   return this.url.replace('/upload', '/upload/w_100');
 });
 
+const opts = {toJSON: {virtuals: true}};//for allowing the toJSON to true in virtual
 
 const CampgroundSchema = new Schema({
   title: String,
@@ -41,6 +42,15 @@ const CampgroundSchema = new Schema({
       ref: 'Review'
     }
   ]
+}, opts);
+
+//no need to write campground.title because it's already inside the documents text
+//of campground schema
+CampgroundSchema.virtual('properties.popUpMarkup').get(function(){
+  return `
+  <strong> <a href="/campgrounds/${this._id}">${this.title}</a> </strong>
+  <p>${this.description.substring(0, 20)}...</p>` //truncate (.substring), allowed characters
+  // 0 - 20 characters only
 });
 
 CampgroundSchema.post('findOneAndDelete', async function(doc){
