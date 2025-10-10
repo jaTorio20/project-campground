@@ -10,8 +10,8 @@
             }
         },
         // center: campground.geometry.coordinates,
-        center: [-111.654923, 40.114955],
-        zoom: 3
+        center: [120.58851, 15.487245],
+        zoom: 5
     });
 
     map.addControl(new mapboxgl.NavigationControl());

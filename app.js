@@ -15,7 +15,7 @@ const session = require('express-session');
 const flash = require('connect-flash')
 const ExpressError = require('./utils/ExpressError');
 const methodOverride = require('method-override');
-const passport = require('passport');
+const passport = require('./config/passport');
 const LocalStrategy = require('passport-local');
 const User = require('./models/user');
 const helmet = require('helmet');
@@ -88,7 +88,7 @@ app.use(sanitizeV5({ replaceWith: '_' })); //
 //default store is memory store
 const sessionConfig = { //useful as it sets session for flash to make it work
   name: 'session', //renaming the session id
-  secret: 'supposetobesecret',
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: true,
   cookie: {
@@ -148,10 +148,6 @@ app.use(
 
 app.use(passport.initialize()); 
 app.use(passport.session());
-passport.use(new LocalStrategy(User.authenticate())); //call the User model then authenticate
-
-passport.serializeUser(User.serializeUser()); //store user in the session
-passport.deserializeUser(User.deserializeUser()); //Unstore user in the session
 
 app.use((req, res, next) => { //this passing up the value from routes to ejs file
   // console.log(req.session);

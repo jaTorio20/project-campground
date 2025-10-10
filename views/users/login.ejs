@@ -33,11 +33,18 @@
                 <img src="/images/starry-sky-2285950_1280.jpg"
                     alt="" class="card-img-top" />
                 <div class="card-body">
-                    <h5 class="card-title">Login</h5>
+                    <h5 class="card-title text-center">Login to your account</h5>
                     <form action="/login" method="POST" class="validated-form" novalidate>
-                        <div class="mb-3">
+                        <!-- <div class="mb-3">
                             <label class="form-label" for="username">Username</label>
                             <input class="form-control" type="text" id="username" name="username" autofocus required>
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                        </div> -->
+                        <div class="mb-3">
+                            <label class="form-label" for="email">Email</label>
+                            <input class="form-control shadow-sm" type="email" id="email" name="email" autofocus required>
                             <div class="valid-feedback">
                                 Looks good!
                             </div>
@@ -45,13 +52,27 @@
 
                         <div class="mb-3">
                             <label class="form-label" for="password">Password</label>
-                            <input class="form-control" type="password" id="password" name="password" required>
+                            <input class="form-control shadow-sm" type="password" id="password" name="password" required>
                             <div class="valid-feedback">
                                 Looks good!
                             </div>
                         </div>
-                        <button class="btn btn-success w-100">Login</button>
+                        <button class="btn btn-outline-primary w-100 rounded-pill">Login</button>
                     </form>
+
+                      <p class="text-center mt-3">
+                        <small class="text-muted"> Or</small>
+                      </p>
+                        <a href="/auth/google" class="btn btn-outline-danger w-100 rounded-pill shadow-sm d-flex align-items-center justify-content-center">
+                          <i class="fa-brands fa-google me-2"></i> Login with Google
+                        </a>
+
+                       <div class="text-center mt-3">
+                        <small class="text-muted">
+                          Forgot your password? 
+                          <a href="/forgot-password" class="text-decoration-none fw-semibold">Click here</a> to reset it.
+                        </small>
+                      </div>
                 </div>
             </div>
         </div>
