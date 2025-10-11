@@ -21,7 +21,10 @@ const UserSchema = new Schema({
     sparse: true // allows multiple nulls (not all users have Google)
   },
   name: String,
-  avatar: String,
+  avatar: {
+  url: String,
+  filename: String
+},
 
   // For password reset
   resetPasswordToken: String,

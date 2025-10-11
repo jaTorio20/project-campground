@@ -54,7 +54,10 @@ passport.use(
           username,
           name: profile.displayName,
           email: email,
-          avatar: profile.photos?.[0]?.value,
+            avatar: {
+              url: profile.photos?.[0]?.value || '/images/placeholder.jpg',
+              filename: `google-${profile.id}`, //pseudo filename for Google photo
+            },
         });
 
         return done(null, newUser);
@@ -65,7 +68,21 @@ passport.use(
   )
 );
 
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
+// passport.serializeUser(User.serializeUser());
+// passport.deserializeUser(User.deserializeUser());
+
+passport.serializeUser((user, done) => {
+  done(null, user.id); // save only the user’s MongoDB _id in the session
+});
+
+passport.deserializeUser(async (id, done) => {
+  try {
+    const user = await User.findById(id);
+    done(null, user); // attaches full user object (including avatar) to req.user
+  } catch (err) {
+    done(err, null);
+  }
+});
+
 
 module.exports = passport;

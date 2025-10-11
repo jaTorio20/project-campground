@@ -5,6 +5,8 @@ const User = require('../models/user');
 const passport = require('passport');
 const { storeReturnTo } = require('../middleware');
 const users = require('../controllers/users');
+const {isAuthor, isLoggedIn} = require('../middleware')
+const upload = require('../middleware/upload');
 
 // router.route('/register')
 // .get( users.renderRegister)
@@ -50,6 +52,11 @@ router.get(
   }),
   users.googleLogin // handled by controller
 );
+
+
+// ----- AVATAR IMAGES-----
+router.post('/avatar', isLoggedIn, upload.single('avatar'), catchAsync(users.uploadAvatar));
+router.delete('/avatar', isLoggedIn, catchAsync(users.deleteAvatar));
 
 module.exports = router;
 

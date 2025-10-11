@@ -3,13 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>BOILERPLATE</title>
+  <title>PinoyCampground</title>
+  <link rel="icon" type="image/png" href="/images/tent.png">
 
   <link rel="stylesheet" href="/css/bootstrap.min.css">
   <link rel="stylesheet" href="/css/styles.css">
   <link rel="stylesheet" href="/css/stars.css">
   <link rel="stylesheet" href="/css/app.css">
   <link rel="stylesheet" href="/css/all.min.css" />
+  <link rel="stylesheet" href="/css/navbar.css" />
 
   <!-- Font Awesome 6 CDN -->
 
@@ -19,20 +21,24 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </head>
-<body class="d-flex flex-column vh-100">
+<!--  style="background-color: #18191A" -->
+<body class="d-flex flex-column vh-100"> 
 
 <%- include('../partials/navbar'); %>
 
-  <main class="container mt-5">
+
+  <main class="container">
     <%- include('../partials/flash'); %>
     <%- body %>
   </main>
+
 
   <%- include('../partials/footer'); %>
   <script src="/js/bootstrap.bundle.min.js"></script>
   <script src="/js/script.js"></script>
   <script src="/js/validateForms.js"></script>
   <script src="/js/campgroundNew.js"></script>
+  <script src="/js/navbar.js"></script>
 
 
 </body>

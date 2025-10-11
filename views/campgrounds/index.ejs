@@ -1,42 +1,61 @@
 
 <% layout('layouts/boilerplate') %>
   <div id="cluster-map"></div>
-  <h1>All Campgrounds</h1>
-  <div>
-    <a href="/campgrounds/new">Add Campground</a>
-  </div>
+  <h1 class="mt-5 mb-4 text-center">All Campgrounds</h1>
 
-    <% for (let campground of campgrounds) {%>
-      <div class="card mb-2">
-        <div class="row">
-          <div class="col-md-4">
-            <% if (campground.images && campground.images.length > 0) { %>
-              <img crossorigin="anonymous" class="img-fluid" alt="" src="<%= campground.images[0].url %>">
+<div class="container-fluid">
+  <div id="campground-list" class="row g-4 justify-content-center">
+    <% for (let campground of campgrounds) { %>
+      <div class="mb-2 col-12 col-sm-10 col-lg-6">
+        <div class="card">
+          <div class="card-body">
+              <div class="d-flex align-items-center">
+                <img src="<%= campground.author?.avatar?.url || '/images/placeholder.jpg' %>" 
+                    class="rounded-circle uploadAvatarImg" alt="Author avatar">
+                <div class="d-flex flex-column ms-2">
+                  <span> <%=campground.author?.username || 'Unknown' %> </span>
+                  <small class="text-muted">Created on: <%= moment(campground.createdAt).tz('Asia/Manila').format('MMMM D, YYYY, h:mm A') %></small>
+                </div>
+              </div>
+            <h5 class="card-title"><%= campground.title %></h5>
+            <p class="card-text"><%= campground.description %></p>
+            <p class="card-text"><small><%= campground.location %></small></p>            
+          </div>
+
+          <div class="campground-image-wrapper bg-light">
+            <% if (campground.images?.length) { %>
+              <img src="<%= campground.images[0].url %>" class="campground-img" alt="Campground image">
             <% } else { %>
-              <img crossorigin="anonymous" class="img-fluid" alt="No image available" 
-              src="/images/default.jpg">
+              <img src="/images/default.jpg" class="campground-img" alt="No image">
             <% } %>
           </div>
-          <div class="col-md-8">
-            <div class="card-body">
-              <h5 class="card-title"><%= campground.title %></h5>
 
-              <p class="card-text"><%= campground.description %></p>
-              <p class="card-text">
-                <small class="text-muted"><%= campground.location %></small>
-              </p>
-              <a class="btn btn-primary" href="/campgrounds/<%=campground._id%>">View <%=campground.title %></a>
-            </div>
+          <div class="d-flex justify-content-center p-5">
+           <a href="/campgrounds/<%= campground._id %>" class="btn btn-outline-primary w-50 shadow-sm">View</a>
           </div>
         </div>
       </div>
-    <% }%>
+    <% } %>
+  </div>
+</div>
+
+
+<div class="text-center my-3">
+  <button id="loadMoreBtn" class="btn btn-primary" data-page="1">
+    <span id="btnText">Load More</span>
+    <span id="btnSpinner" class="spinner-border spinner-border-sm ms-2" role="status" aria-hidden="true" style="display:none;"></span>
+  </button>
+  <p id="endText" style="display:none;">No more campgrounds.</p>
+</div>
+
+
 
     <script>
           const mapToken = '<%-process.env.MAPBOX_TOKEN%>';
           const campgrounds = {features: <%-JSON.stringify(campgrounds)%>};
     </script>
     <script src="/js/clusterMap.js"></script>
+    <script src="/js/indexSpinner.js"></script>
 
 
 

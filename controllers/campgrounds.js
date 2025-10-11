@@ -6,25 +6,32 @@ const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding');
 const mapBoxToken = process.env.MAPBOX_TOKEN;
 const geocoder =  mbxGeocoding({ accessToken: mapBoxToken});
 
+// module.exports.index =  async(req, res) => {
+//   const campgrounds = await Campground.find({});
+//   res.render('campgrounds/index', {campgrounds})
+// }
 module.exports.index =  async(req, res) => {
-  const campgrounds = await Campground.find({});
-  res.render('campgrounds/index', {campgrounds})
+  const limit = 30;
+  const page = parseInt(req.query.page) || 1;
+
+  const campgrounds = await Campground.find({}).populate('author')
+    .skip((page - 1) * limit)
+    .limit(limit);
+
+  // If AJAX, return JSON
+  if (req.xhr || req.headers.accept.indexOf('json') > -1) {
+    return res.json(campgrounds);
+  }
+
+  // Initial full page render
+  res.render('campgrounds/index', { campgrounds });
 }
 
 module.exports.renderNewForm = (req, res) => {
     res.render('campgrounds/new');
 }
 
-// module.exports.createCampground = async (req, res, next) => {
-//   // if(!req.body.campground) throw new ExpressError('Invalid Campground Data', 400);
-//   const campground = new Campground(req.body.campground);
-//   campground.images = req.files.map(f => ({url: f.path, filename: f.filename}));
-//   campground.author = req.user._id; //req.user automatically added in 
-//   await campground.save();
-//   // console.log(campground);
-//   req.flash('success', 'Successfully made a new campground!');
-//   res.redirect(`/campgrounds/${campground._id}`) //
-// }
+
 module.exports.createCampground = async (req, res, next) => {
   const geoData = await geocoder.forwardGeocode({
     query: req.body.campground.location,
@@ -40,8 +47,9 @@ module.exports.createCampground = async (req, res, next) => {
         folder: 'PinoyCampground',
         allowed_formats: ['jpg', 'jpeg', 'png'],
         transformation: [
-          { width: 800, height: 800, crop: 'limit' },
-          { radius: 20 }
+          { width: 800, height: 800, crop: 'limit' }
+          // ,
+          // { radius: 20 }
         ]       
       });
       imgs.push({ url: result.secure_url, filename: result.public_id });
@@ -158,3 +166,4 @@ module.exports.deleteCampground = async (req, res) => {
     req.flash('success', 'Campground Deleted successfully!');
   res.redirect('/campgrounds');
 }
+

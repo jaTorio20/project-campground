@@ -5,8 +5,10 @@
         style: 'mapbox://styles/mapbox/standard',
         config: {
             basemap: {
-                theme: 'monochrome',
-                lightPreset: 'day'
+                theme: 'cool',
+                lightPreset: 'night'
+                // theme: 'monochrome',
+                // lightPreset: 'night'
             }
         },
         // center: campground.geometry.coordinates,

@@ -1,9 +1,54 @@
 #cluster-map {
-    width: 100%;
-    height: 500px;
+  width: 100vw;        /* full viewport width */
+  max-width: 100vw;    /* prevent container limits */
+  margin-left: calc(-50vw + 50%); /* center it if inside a container */
+  height: 600px;       /* adjust height as needed */
 }
-
 #map {
     width: 100%;
     height: 300px;
 }
+
+
+/* ****** campground/index  ***** */
+.campground-image-wrapper {
+  width: 100%;            /* full column width */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* optional: background to show blank space */
+  overflow: hidden;
+  margin: auto;
+
+}
+.campground-img {
+  max-width: 90%;
+  object-fit: cover;    /* scale image to fit inside container without cropping */
+    height: 400px; 
+}
+
+@media(max-width: 650px){
+.campground-img {
+    height: 250px; 
+}
+}
+
+@media(max-width: 990px){
+.campground-img {
+    height: 250px; 
+}
+}
+
+/* ****** campground/show  ***** */
+.showCampground{
+    max-width: 100%;
+    object-fit: cover;    /* scale image to fit inside container without cropping */
+    height: 500px; 
+    justify-content: center;
+}
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  filter: invert(1); /* turns the default white arrows dark */
+}
+
+
