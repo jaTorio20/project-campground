@@ -1,23 +1,87 @@
-<nav class="navbar sticky-top navbar-expand-lg bg-dark navbar-dark">
+<nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">Campground</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+    <!-- <img src="/images/tent.png" alt="" class="logoNavbar"> -->
+    <a class="navbar-brand" href="#">PinoyCampground</a>
+
+    
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+      aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav">
-        <a class="nav-link active" aria-current="page" href="/">Home</a>
-        <a class="nav-link" href="/campgrounds">Campgrounds</a>
-        <a class="nav-link" href="/campgrounds/new">New Campgrounds</a>
-      </div>
-      <div class="navbar-nav ml-auto">
-        <% if(!currentUser) {%>
-        <a class="nav-link" href="/login">Login</a>
-        <a class="nav-link" href="/register">Register</a>
-       <% } else{%>
-        <a class="nav-link" href="/logout">Logout</a>
-        <%  } %>
-      </div>
+
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      
+      <!-- LEFT SIDE -->
+      <ul class="navbar-nav d-flex align-items-center me-auto">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/campgrounds">Campgrounds</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/campgrounds/new">New Campgrounds</a>
+        </li>
+      </ul>
+
+      <!-- <form action="/campgrounds" method="GET" class="d-flex mb-3">
+        <input type="text" name="q" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form> -->
+
+
+
+      <!-- RIGHT SIDE -->
+      <% if (!currentUser) { %>
+        <ul class="navbar-nav ms-auto">
+
+          <div class="form-check form-switch d-flex align-items-center ms-auto me-2">
+            <input class="form-check-input " type="checkbox" id="darkModeSwitch">
+          </div>
+
+          <li class="nav-item">
+            <a class="nav-link" href="/login">Login</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/register">Register</a>
+          </li>
+        </ul>
+
+      <% } else { %>
+        <ul class="navbar-nav ms-auto">
+          <div class="form-check form-switch d-flex align-items-center ms-auto me-2">
+            <input class="form-check-input" type="checkbox" id="darkModeSwitch">
+          </div>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+              data-bs-toggle="dropdown" aria-expanded="false">
+              <img src="<%= currentUser.avatar.url || '/images/placeholder.jpg' %>"
+                class="rounded-circle uploadAvatarImg" >
+            </a>
+            <ul class="dropdown-menu custom-dropdown p-3 dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
+              <li>
+                <form action="/avatar" method="POST" enctype="multipart/form-data">
+                  <div class="input-group">
+                    <input type="file" name="avatar" class="form-control form-control-sm" accept="image/*" required>
+                    <button class="btn btn-primary" type="submit">Upload</button>
+                  </div>
+                </form>
+              </li>
+                <li><hr class="dropdown-divider"></li>
+
+              <li>
+                <form action="/avatar?_method=DELETE" method="POST" onsubmit="return confirm('Remove profile picture?')">
+                  <button class="dropdown-item text-danger" type="submit">Delete profile picture</button>
+                </form>
+              </li>
+
+                <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="/logout">Logout</a></li>
+            </ul>
+          </li>
+        </ul>
+      <% } %>
+
     </div>
   </div>
 </nav>

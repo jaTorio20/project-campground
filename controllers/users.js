@@ -1,6 +1,8 @@
 const User = require('../models/user');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
+const cloudinary = require('../cloudinary');
+const fs = require('fs');
 
 module.exports.renderRegister = (req, res) => {
   res.render('users/register');
@@ -131,7 +133,7 @@ module.exports.sendResetEmail = async (req, res) => {
       },
     });
 
-    const resetURL = `http://${req.headers.host}/reset-password/${token}`;
+    const resetURL = `https://${req.headers.host}/reset-password/${token}`;
 
     await transporter.sendMail({
       to: user.email,
@@ -266,3 +268,72 @@ module.exports.googleLogin = (req, res) => {
   req.flash('success', `Welcome back, ${req.user.name || 'User'}!`);
   return res.redirect('/campgrounds');
 };
+
+
+
+// ---AVATAR IMAGES
+module.exports.uploadAvatar = async (req, res) => {
+
+    const user = await User.findById(req.user._id);
+
+    if (!req.file) {
+      req.flash('error', 'No image uploaded');
+      return res.redirect('/campgrounds');
+    }
+
+    // If user already has an avatar, delete it from Cloudinary first
+    if (user.avatar && user.avatar.filename) {
+      await cloudinary.uploader.destroy(user.avatar.filename);
+    }
+
+    const result = await cloudinary.uploader.upload(req.file.path, {
+      folder: 'PinoyCampground/avatars',
+      allowed_formats: ['jpg', 'jpeg', 'png'],
+      transformation: [
+        { width: 800, height: 800, crop: 'limit' },
+        { radius: 20 }
+      ]
+    });
+
+    // Save new avatar info
+    user.avatar = { url: result.secure_url, filename: result.public_id };
+    await user.save();
+
+    // Delete temporary local file
+    await fs.promises.unlink(req.file.path);
+
+    req.flash('success', 'Profile picture updated!');
+    return res.redirect('/campgrounds');
+
+    // console.error('Avatar upload failed:', err);
+    // req.flash('error', 'Failed to upload profile picture.');
+    // res.redirect('/campgrounds');
+
+};
+
+module.exports.deleteAvatar = async (req, res) => {
+
+    const user = await User.findById(req.user._id);
+
+    // if there's a Cloudinary avatar inside "PinoyCampground/avatars" delete
+    if (
+      user.avatar &&
+      user.avatar.filename && 
+      user.avatar.filename.startsWith('PinoyCampground/avatars/')
+    ) {
+        await cloudinary.uploader.destroy(user.avatar.filename);
+        if(process.env.NODE_ENV !== 'production'){
+        console.log(` Deleted Cloudinary image: ${user.avatar.filename}`);
+          }
+
+    }
+
+    // Reset the user's avatar data
+    user.avatar = { url: '', filename: '' };
+    await user.save();
+
+    req.flash('success', 'Profile picture removed');
+    res.redirect('/campgrounds');
+
+};
+

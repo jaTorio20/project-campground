@@ -19,7 +19,7 @@ const passport = require('./config/passport');
 const LocalStrategy = require('passport-local');
 const User = require('./models/user');
 const helmet = require('helmet');
-
+const moment = require('moment-timezone');
 const cron = require('node-cron');
 const fs = require('fs');
 
@@ -109,6 +109,7 @@ const scriptSrcUrls = [
     "https://kit.fontawesome.com/",
     "https://cdnjs.cloudflare.com/",
     "https://cdn.jsdelivr.net",
+    ,"https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
 ];
 const styleSrcUrls = [
     "https://kit-free.fontawesome.com/",
@@ -140,6 +141,7 @@ app.use(
                 "data:",
                 "https://res.cloudinary.com/dr8nraigy/", //SHOULD MATCH YOUR CLOUDINARY ACCOUNT! 
                 "https://images.unsplash.com/",
+                "https://lh3.googleusercontent.com/"
             ],
             fontSrc: ["'self'", ...fontSrcUrls],
         },
@@ -152,7 +154,9 @@ app.use(passport.session());
 app.use((req, res, next) => { //this passing up the value from routes to ejs file
   // console.log(req.session);
   console.log(req.query);
+  console.log('🔹 Current logged-in user:', req.user);
   res.locals.currentUser = req.user; //to add logic for login/register and logout if log in already
+  res.locals.moment = moment;
   res.locals.success = req.flash('success');//in ejs file should <%= success %> u're accessing it into ejs
   res.locals.error = req.flash('error');
   next();
@@ -212,6 +216,7 @@ app.use((err, req, res, next) => {
   res.status(statusCode).render('error', {err});
 });
 
-app.listen(3000, async (req, res) => {
-  console.log('LISTENING TO PORT 3000');
+const port = process.env.PORT || 3000;
+app.listen(port, async (req, res) => {
+  console.log(`LISTENING TO PORT ${port}`);
 });

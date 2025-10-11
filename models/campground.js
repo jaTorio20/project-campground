@@ -41,15 +41,19 @@ const CampgroundSchema = new Schema({
       type: Schema.Types.ObjectId, 
       ref: 'Review'
     }
-  ]
+  ],
+  createdAt: { type: Date, default: Date.now }
 }, opts);
 
 //no need to write campground.title because it's already inside the documents text
 //of campground schema
 CampgroundSchema.virtual('properties.popUpMarkup').get(function(){
   return `
-  <strong> <a href="/campgrounds/${this._id}">${this.title}</a> </strong>
-  <p>${this.description.substring(0, 20)}...</p>` //truncate (.substring), allowed characters
+   <div class="mapbox-popup">
+    <strong> <a href="/campgrounds/${this._id}">${this.title}</a> </strong>
+    <p>${this.description.substring(0, 20)}...</p> 
+  </div>
+  ` //truncate (.substring), allowed characters
   // 0 - 20 characters only
 });
 

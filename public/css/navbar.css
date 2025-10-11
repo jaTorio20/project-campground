@@ -1,0 +1,110 @@
+.custom-dropdown {
+  width: 280px !important; /* or max-width, min-width */
+}
+.uploadAvatarImg{
+width: 50px; 
+height: 50px; 
+object-fit: cover;
+}
+
+.logoNavbar{
+width: 100px; 
+height: 100px; 
+object-fit: cover;
+}
+
+@media (max-width: 991.98px) { 
+  .navbar-nav {
+    text-align: left !important;
+    align-items: flex-start !important;
+  }
+}
+
+/* NAVBAR DARKMODE */
+.navbar,
+.navbar .nav-link,
+.navbar .navbar-brand {
+  transition: color 0.3s ease; /* only text color transitions */
+  /* background-color: transparent !important;  */
+}
+
+
+
+  body.dark-mode {
+    background-color: #18191A;
+    color: #E4E6EB;
+  }
+
+  body.dark-mode .list-group, 
+  body.dark-mode .list-group-item {
+    background-color: #18191A;
+    color: #E4E6EB;
+  }
+
+  body.dark-mode .campground-image-wrapper {
+    background-color: #333536 !important;
+
+  }
+
+  body.dark-mode .navbar, 
+  body.dark-mode .navbar .nav-link,
+  body.dark-mode .navbar .navbar-brand {
+    background-color: #242526 !important;
+    color: #E4E6EB !important;
+  }
+
+  body.dark-mode .navbar .nav-link.active,
+  body.dark-mode .navbar .nav-link:hover,
+  body.dark-mode .navbar .navbar-brand:hover {
+    color: #ffffff !important; /* bright white for active/hover */
+  }
+
+  body.dark-mode .card {
+    background-color: #242526;
+    color: #E4E6EB;
+  }
+
+  body.dark-mode .btn-outline-primary {
+    color: #E4E6EB;
+    border-color: #3A3B3C;
+  }
+  body.dark-mode .forgot-password {
+    color: #E4E6EB !important;
+  
+  }
+
+  body.dark-mode .btn-outline-primary:hover {
+    background-color: #3A3B3C;
+  }
+
+  body.dark-mode .campground-image-wrapper {
+    background-color: #3A3B3C;
+  }
+
+  /* Index campground Darkmode */
+  body.dark-mode .text-muted {
+    color: #B0B3B8 !important; /* Facebook-style gray text on dark */
+  }
+
+  body.dark-mode small,
+  body.dark-mode span {
+    color: #E4E6EB; /* Normal text (author name, etc.) */
+  }
+
+  /* --------------- Dark mode navbar toggler fix ------------*/
+body.dark-mode .navbar-toggler {
+  border-color: #B0B3B8; /* Light gray border */
+}
+
+body.dark-mode .navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(224, 225, 226, 0.8)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+body.dark-mode .mapbox-popup,
+.mapbox-popup {
+  background-color: #fff !important;
+  color: #000 !important;
+}
+
+
+

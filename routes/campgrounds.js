@@ -23,6 +23,8 @@ router.route('/:id')
 
 router.get('/:id/edit', isLoggedIn, isAuthor, catchAsync(campgrounds.renderEditForm));
 
+
+
 module.exports = router;
 
 // router.get('/', catchAsync(campgrounds.index));
