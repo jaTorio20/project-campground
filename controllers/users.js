@@ -31,28 +31,85 @@ module.exports.sendOTP = async (req, res) => {
     // Store data in session
     req.session.registerData = { username, email, password, otp, createdAt: Date.now() };
 
-    // Send email
+    // // Send email
+    // const transporter = nodemailer.createTransport({
+    //   host: 'smtp.gmail.com',
+    //   port: 587,        // TLS
+    //   secure: false,    // true for SSL (465), false for TLS (587)
+    //   auth: {
+    //     user: process.env.GMAIL_USER,
+    //     pass: process.env.GMAIL_PASS,
+    //   },
+    // });
     const transporter = nodemailer.createTransport({
-      host: 'smtp.gmail.com',
-      port: 587,        // TLS
-      secure: false,    // true for SSL (465), false for TLS (587)
+      host: 'smtp-relay.brevo.com',  
+      port: 587,                    
+      secure: false,            
       auth: {
-        user: process.env.GMAIL_USER,
-        pass: process.env.GMAIL_PASS,
+        user: process.env.BREVO_USER, 
+        pass: process.env.BREVO_PASS, 
       },
     });
 
-  try {
-    const info = await transporter.sendMail({
-      from: `"PinoyCamp" <${process.env.GMAIL_USER}>`,
-      to: email,
-      subject: 'Your OTP for PinoyCampground Registration',
-      text: `Your OTP is: ${otp}. It expires in 10 minutes.`,
-    });
-    console.log(' Mail sent:', info.response);
-    } catch (err) {
-      console.error(' Failed to send mail:', err);
-    }
+    await transporter.sendMail({
+  from: `"PinoyCampground Support" <johntorio2422@gmail.com>`,
+  to: email,
+  subject: 'Your OTP Code for PinoyCampground Registration',
+  html: `
+  <div style="
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f6f8;
+    padding: 30px;
+    color: #333;
+  ">
+    <div style="
+      max-width: 500px;
+      margin: auto;
+      background: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+      padding: 25px;
+    ">
+      <h2 style="color: #2b7a78; text-align: center; margin-bottom: 10px;">
+        PinoyCampground
+      </h2>
+      <p style="text-align: center; font-size: 15px; color: #555;">
+        Hello! Here’s your One-Time Password (OTP) to complete your registration:
+      </p>
+
+      <div style="
+        background-color: #def2f1;
+        color: #17252a;
+        text-align: center;
+        font-size: 24px;
+        font-weight: 700;
+        letter-spacing: 4px;
+        border-radius: 8px;
+        padding: 12px 0;
+        margin: 25px auto;
+        width: fit-content;
+      ">
+        ${otp}
+      </div>
+
+      <p style="text-align: center; color: #555; font-size: 14px;">
+        This OTP is valid for <strong>10 minutes</strong>.<br>
+        If you didn’t request this, please ignore this email.
+      </p>
+
+      <hr style="margin: 25px 0; border: none; border-top: 1px solid #eee;">
+
+      <p style="text-align: center; font-size: 12px; color: #888;">
+        &copy; ${new Date().getFullYear()} PinoyCampground. All rights reserved.<br>
+        <a href="https://pinoycampground.onrender.com" 
+           style="color: #2b7a78; text-decoration: none;">Visit Website</a>
+      </p>
+    </div>
+  </div>
+  `,
+});
+
+
 
     req.flash('success', 'OTP sent to your email. Please check.');
     return res.redirect('/verify-otp');
@@ -143,31 +200,67 @@ module.exports.sendResetEmail = async (req, res) => {
     
 
     // Send email
-    const transporter = nodemailer.createTransport({
-      host: 'smtp.gmail.com',
-      port: 587,        // TLS
-      secure: false,    // true for SSL (465), false for TLS (587)
+     const transporter = nodemailer.createTransport({
+      host: 'smtp-relay.brevo.com',
+      port: 587,                   
+      secure: false,             
       auth: {
-        user: process.env.GMAIL_USER,
-        pass: process.env.GMAIL_PASS,
+        user: process.env.BREVO_USER, 
+        pass: process.env.BREVO_PASS, 
       },
     });
 
     // const resetURL = `http://${req.headers.host}/reset-password/${user._id}/${token}`;
         // const protocol = process.env.NODE_ENV === 'production' ? 'https' : 'http';
     // const resetURL = `${protocol}://${req.headers.host}/reset-password/${user._id}/${token}`;
+    // console.log('BASE_URL:', process.env.BASE_URL);
     const resetURL = `${process.env.BASE_URL}/reset-password/${user._id}/${token}`;
 
     await transporter.sendMail({
-      to: user.email,
-      from: process.env.GMAIL_USER,
-      subject: 'Password Reset for PinoyCampground',
-      text: `You are receiving this because you requested a password reset.\n\n
-             Please click the following link, or paste it into your browser to complete the process:\n\n
-             ${resetURL}\n\n
-             This link will expire in 1 hour.\n\n
-             If you did not request this, please ignore this email.\n`
-    });
+    to: user.email,
+    from: `"PinoyCampground" <johntorio2422@gmail.com>`,
+    subject: 'Reset Your PinoyCampground Password',
+    html: `
+    <div style="font-family: Arial, Helvetica, sans-serif; background: #f8fafc; padding: 40px;">
+      <div style="
+        max-width: 440px;
+        margin: 0 auto;
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 35px 30px;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+        text-align: center;
+      ">
+        <h2 style="color: #2e7d32; margin-bottom: 20px; font-size: 24px;">PinoyCampground</h2>
+        
+        <p style="color: #444; line-height: 1.6; margin-bottom: 25px; font-size: 15px;">
+          We received a request to reset your password.  
+          Click the button below to create a new one:
+        </p>
+        
+        <a href="${resetURL}" style="
+          display: inline-block;
+          background: #2e7d32;
+          color: #ffffff;
+          text-decoration: none;
+          padding: 12px 28px;
+          border-radius: 6px;
+          font-weight: 600;
+          font-size: 15px;
+        ">Reset Password</a>
+        
+        <p style="color: #666; 
+        margin-top: 30px; 
+        font-size: 13px; 
+        line-height: 1.5;">
+          This link will expire in <strong>1 hour</strong>.<br>
+          If you didn’t request this, please ignore this email.
+        </p>
+      </div>
+    </div>
+  `,
+});
+
 
     req.flash('success', 'Password reset email sent. Please check your inbox.');
     return res.redirect('/login');
