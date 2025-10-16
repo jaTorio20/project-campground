@@ -30,18 +30,20 @@ const reviewRoutes = require('./routes/reviews');
 
 const MongoStore = require('connect-mongo');
 
-// mongoose.connect('mongodb://localhost:27017/campground'); //turn this on for local connection
 
-const dbURL = process.env.DB_URL || 'mongodb://localhost:27017/campground'; //turn off for going to local connection
-mongoose.connect(dbURL);
+const dbURL = process.env.DB_URL || "mongodb://localhost:27017/campground"; 
 
-const db = mongoose.connection;
 
-db.on("error", console.error.bind(console, "connection error:"));
-db.once("open", () => {
-  if(process.env.NODE_ENV !== 'production'){
-    console.log("Database connected");
-  }
+mongoose.connect(dbURL, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => {
+  console.log(`Database connected to ${dbURL}`);
+})
+.catch((err) => {
+  console.error("MongoDB connection error:", err);
+  process.exit(1); 
 });
 
 const app = express();
