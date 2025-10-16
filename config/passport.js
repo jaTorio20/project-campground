@@ -38,8 +38,9 @@ passport.use(
 
         // STEP 3: Auto-generate a unique username for new Google user
         const baseUsername = profile.displayName
-          ? profile.displayName.replace(/\s+/g, '').toLowerCase()
+          ? profile.displayName.replace(/\s+/g, '')
           : email.split('@')[0]; // fallback to email prefix if no displayName
+        
         let username = baseUsername;
         let count = 1;
 
@@ -67,9 +68,6 @@ passport.use(
     }
   )
 );
-
-// passport.serializeUser(User.serializeUser());
-// passport.deserializeUser(User.deserializeUser());
 
 passport.serializeUser((user, done) => {
   done(null, user.id); // save only the user’s MongoDB _id in the session

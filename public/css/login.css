@@ -1,0 +1,16 @@
+/* Modern white tooltip */
+.tooltip-inner {
+  background-color: #fff;         /* white background */
+  color: #212529;                 /* dark text for contrast */
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* subtle modern shadow */
+}
+
+.tooltip.bs-tooltip-auto[data-popper-placement^=right] .tooltip-arrow::before,
+.tooltip.bs-tooltip-end .tooltip-arrow::before {
+  border-right-color: #fff;
+}
+

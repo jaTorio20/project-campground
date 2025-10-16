@@ -1,20 +1,28 @@
 <% layout('layouts/boilerplate') %>
 
-<div class="container d-flex justify-content-center align-items-center mt-5">
+<div class="container d-flex justify-content-center align-items-center mt-5 mb-5">
     <div class="row justify-content-center">
       <!-- mx-auto automatic horizontal margins -->
         <div class="col-md-8 col-xl-4"> 
             <div class="card shadow">
-                <img src="/images/starry-sky-2285950_1280.jpg"
+                <img src="/images/default.jpg"
                     alt="" class="card-img-top" />
                 <div class="card-body">
                     <h5 class="card-title text-center">Register</h5>
-                      <form action="/register" method="POST" class="validated-form" novalidate>
+                      <form action="/register" method="POST" class="validated-form" novalidate id="signupForm">
                         <div class="mb-3">
                           <label class="form-label" for="username">Username</label>
-                          <input class="form-control shadow-sm" type="text" id="username" name="username" required autofocus>
-                            <div class="invalid-feedback">
-                              Please provide a location.
+                          <input class="form-control shadow-sm" 
+                          type="text" 
+                          id="username" 
+                          name="username" 
+                          required
+                          minlength="5"
+                          maxlength="30" 
+                          pattern="^\S+$" 
+                          autofocus>
+                            <div class="invalid-feedback" id="usernameFeedback">
+                              Please provide a username.
                             </div>
                             <div class="valid-feedback">
                               Looks good!
@@ -25,7 +33,7 @@
                           <label class="form-label" for="email">Email</label>
                           <input class="form-control shadow-sm" type="email" id="email" name="email" required>
                             <div class="invalid-feedback">
-                              Please provide a location.
+                              Please provide an email.
                             </div>
                             <div class="valid-feedback">
                               Looks good!
@@ -33,15 +41,24 @@
                         </div>
 
                         <div class="mb-3">
-                          <label class="form-label" for="password">Password</label>
-                          <input class="form-control shadow-sm" type="password" id="password" name="password" required>
-                            <div class="invalid-feedback">
-                              Please provide a location.
+                            <label class="form-label" for="password">Password</label>
+                            <input 
+                                type="password" 
+                                class="form-control shadow-sm" 
+                                id="password" 
+                                name="password" 
+                                required
+                                minlength="8"
+                                maxlength="30"
+                                pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}"
+                            >
+                            <div class="invalid-feedback" id="passwordFeedback">
+                              Please provide an password.
                             </div>
                             <div class="valid-feedback">
-                              Looks good!
+                              Password meets all requirements
                             </div>
-                        </div>
+                          </div>
                           <button class="btn btn-primary w-100">Register</button>
                       </form>
                 </div>
@@ -49,3 +66,5 @@
         </div>
     </div>
 </div>
+
+<script src="/js/passwordRequirement.js"></script>

@@ -1,9 +1,17 @@
+/* .notify {
+  z-index: 9999 !important;
+} */
+
 .custom-dropdown {
-  width: 280px !important; /* or max-width, min-width */
+  width: 280px !important; 
+}
+
+.navbar{
+   background-color: #ffffff; 
 }
 .uploadAvatarImg{
-width: 50px; 
-height: 50px; 
+width: 40px; 
+height: 40px; 
 object-fit: cover;
 }
 
@@ -13,38 +21,47 @@ height: 100px;
 object-fit: cover;
 }
 
-@media (max-width: 991.98px) { 
-  .navbar-nav {
-    text-align: left !important;
-    align-items: flex-start !important;
-  }
-}
-
-/* NAVBAR DARKMODE */
+/* ####################### NAVBAR DARKMODE */
 .navbar,
 .navbar .nav-link,
 .navbar .navbar-brand {
-  transition: color 0.3s ease; /* only text color transitions */
-  /* background-color: transparent !important;  */
+  transition: color 0.3s ease; 
+
+}
+
+body{
+      transition: 0.5s ease;
+}
+
+  body.dark-mode {
+    background-color: #121212 !important;
+    color: #E4E6EB;
+    transition: 0.5s ease;
+  }
+
+  body.dark-mode .footer,
+  body.dark-mode .footer-text{
+    background-color: #242526 !important;
+    color: #aaa;
+  }
+
+body.dark-mode .tooltip .tooltip-inner {
+  background-color: #e4e6eb;
+  color: #18191a; 
+  border: 1px solid #555;
 }
 
 
-
-  body.dark-mode {
-    background-color: #18191A;
-    color: #E4E6EB;
+  body.dark-mode .input-group-text{
+    color: #18191A;
   }
 
   body.dark-mode .list-group, 
   body.dark-mode .list-group-item {
-    background-color: #18191A;
+    background-color: #242526;
     color: #E4E6EB;
   }
 
-  body.dark-mode .campground-image-wrapper {
-    background-color: #333536 !important;
-
-  }
 
   body.dark-mode .navbar, 
   body.dark-mode .navbar .nav-link,
@@ -56,12 +73,16 @@ object-fit: cover;
   body.dark-mode .navbar .nav-link.active,
   body.dark-mode .navbar .nav-link:hover,
   body.dark-mode .navbar .navbar-brand:hover {
-    color: #ffffff !important; /* bright white for active/hover */
+    color: #ffffff !important; 
+  }
+  .nav-link:hover{
+    color: #0d6efd !important;
   }
 
   body.dark-mode .card {
-    background-color: #242526;
+    background-color: #1f1f1f;
     color: #E4E6EB;
+    box-shadow: 0 1px 8px rgba(172, 166, 166, 0.404);
   }
 
   body.dark-mode .btn-outline-primary {
@@ -77,23 +98,20 @@ object-fit: cover;
     background-color: #3A3B3C;
   }
 
-  body.dark-mode .campground-image-wrapper {
-    background-color: #3A3B3C;
-  }
 
-  /* Index campground Darkmode */
+  /* ########################## Index campground Darkmode */
   body.dark-mode .text-muted {
-    color: #B0B3B8 !important; /* Facebook-style gray text on dark */
+    color: #B0B3B8 !important;
   }
 
   body.dark-mode small,
   body.dark-mode span {
-    color: #E4E6EB; /* Normal text (author name, etc.) */
+    color: #E4E6EB;
   }
 
-  /* --------------- Dark mode navbar toggler fix ------------*/
+
 body.dark-mode .navbar-toggler {
-  border-color: #B0B3B8; /* Light gray border */
+  border-color: #B0B3B8; 
 }
 
 body.dark-mode .navbar-toggler-icon {
@@ -105,6 +123,55 @@ body.dark-mode .mapbox-popup,
   background-color: #fff !important;
   color: #000 !important;
 }
+
+/* ########################### DARK MODE SWITCH */
+.custom-switch {
+  position: relative;
+  width: 48px;
+  height: 26px;
+  background-color: #e9ecef;
+  border-radius: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 8px;
+  transition: background-color 0.3s ease;
+  
+}
+
+
+.custom-switch .sun-icon,
+.custom-switch .moon-icon {
+  font-size: 14px;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Default light mode */
+.custom-switch .moon-icon {
+  opacity: 0;
+  color: #fffb00;
+   text-shadow: 0 0px 8px rgba(236, 193, 2, 0.7);
+}
+
+/* When toggled */
+#darkModeSwitch:checked + .custom-switch {
+  background-color: #4e4e4e;
+}
+
+#darkModeSwitch:checked + .custom-switch .sun-icon {
+  opacity: 0;
+
+}
+
+#darkModeSwitch:checked + .custom-switch .moon-icon {
+  opacity: 1;
+
+}
+
+
+
+
 
 
 

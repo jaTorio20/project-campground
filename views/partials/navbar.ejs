@@ -1,4 +1,4 @@
-<nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-md navbar-light sticky-top">
   <div class="container-fluid">
     <!-- <img src="/images/tent.png" alt="" class="logoNavbar"> -->
     <a class="navbar-brand" href="#">PinoyCampground</a>
@@ -12,7 +12,7 @@
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
       
       <!-- LEFT SIDE -->
-      <ul class="navbar-nav d-flex align-items-center me-auto">
+      <ul class="navbar-nav me-auto">
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="/">Home</a>
         </li>
@@ -35,9 +35,14 @@
       <% if (!currentUser) { %>
         <ul class="navbar-nav ms-auto">
 
-          <div class="form-check form-switch d-flex align-items-center ms-auto me-2">
-            <input class="form-check-input " type="checkbox" id="darkModeSwitch">
-          </div>
+        <!-- Dark Mode Toggle -->
+            <div class=" d-flex align-items-center ">
+                <input class="form-check-input visually-hidden" type="checkbox" id="darkModeSwitch">
+                <label for="darkModeSwitch" class="custom-switch ">
+                    <i class="bi bi-sun-fill sun-icon"></i>
+                    <i class="bi bi-moon-stars moon-icon"></i>
+                </label>
+            </div>
 
           <li class="nav-item">
             <a class="nav-link" href="/login">Login</a>
@@ -49,16 +54,32 @@
 
       <% } else { %>
         <ul class="navbar-nav ms-auto">
-          <div class="form-check form-switch d-flex align-items-center ms-auto me-2">
-            <input class="form-check-input" type="checkbox" id="darkModeSwitch">
-          </div>
+        <!-- Dark Mode Toggle -->
+            <div class=" d-flex align-items-center ">
+                <input class="form-check-input visually-hidden" type="checkbox" id="darkModeSwitch">
+                <label for="darkModeSwitch" class="custom-switch ">
+                    <i class="bi bi-sun-fill sun-icon"></i>
+                    <i class="bi bi-moon-stars moon-icon"></i>
+                </label>
+            </div>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
               data-bs-toggle="dropdown" aria-expanded="false">
-              <img src="<%= currentUser.avatar.url || '/images/placeholder.jpg' %>"
+              <img src="<%= currentUser.avatar.url || '/images/default-profile-icon.png' %>"
                 class="rounded-circle uploadAvatarImg" >
             </a>
             <ul class="dropdown-menu custom-dropdown p-3 dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
+              
+              <li>
+                <div>
+                  <img src="<%= currentUser.avatar.url || '/images/default-profile-icon.png' %>"
+                  class="rounded-circle border border-1 uploadAvatarImg" >
+                  <span class="text-muted">@<%=currentUser.username %></span>
+                </div>
+              </li>
+
+              <hr>
+
               <li>
                 <form action="/avatar" method="POST" enctype="multipart/form-data">
                   <div class="input-group">

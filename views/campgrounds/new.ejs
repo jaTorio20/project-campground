@@ -1,11 +1,11 @@
 <% layout('layouts/boilerplate') %>
-<div class="row">
+<div class="row mt-5">
     <h1 class="text-center">New Campground</h1>
-    <div class="col-md-6 offset-md-3">
+    <div class="col-md-6 offset-md-3 card p-4">
         <form action="/campgrounds" method="POST" novalidate class="validated-form" enctype="multipart/form-data">
             <div class="mb-3">
                 <label class="form-label" for="title">Title</label>
-                <input class="form-control" type="text" id="title" name="campground[title]" required>
+                <input class="form-control shadow-sm" type="text" id="title" name="campground[title]" required>
                     <div class="invalid-feedback">
                     Please provide a title.
                     </div>
@@ -15,7 +15,7 @@
             </div>
             <div class="mb-3">
                 <label class="form-label" for="location">Location</label>
-                <input class="form-control" type="text" id="location" name="campground[location]" required>
+                <input class="form-control shadow-sm" type="text" id="location" name="campground[location]" required>
                     <div class="invalid-feedback">
                     Please provide a location.
                     </div>
@@ -27,8 +27,8 @@
             <div class="mb-3">
                 <label class="form-label" for="price">Campground Price</label>
                 <div class="input-group">
-                    <span class="input-group-text" id="price-label">$</span>
-                    <input type="text" class="form-control" id="price" placeholder="0.00" aria-label="price"
+                    <span class="input-group-text" id="price-label">&#x20B1;</span>
+                    <input type="text" class="form-control shadow-sm" id="price" placeholder="0.00" aria-label="price"
                         aria-describedby="price-label" name="campground[price]" required>
                     <div class="invalid-feedback">
                     Please provide a price
@@ -41,7 +41,7 @@
 
             <div class="mb-3">
                 <label class="form-label" for="description">Description</label>
-                <textarea class="form-control" type="text" id="description" name="campground[description]" required></textarea>
+                <textarea class="form-control shadow-sm" type="text" id="description" name="campground[description]" required></textarea>
                     <div class="invalid-feedback">
                     Please provide a description
                     </div>
@@ -51,15 +51,24 @@
             </div>
             <div class="mb-3">
                 <label for="image" class="form-label">Upload Images</label>
-                <input class="form-control" type="file" id="image" name="image" multiple >
-                <!-- <div id="filePreview" class="d-flex flex-column gap-2"></div> -->
+                <input class="form-control shadow-sm" type="file" id="image" name="image" multiple required>
+                    <div class="invalid-feedback">
+                    Please provide an image
+                    </div>
+
+                    <div class="valid-feedback">
+                    Looks good!
+                    </div>  
             </div>
 
-            <div class="mb-3">
-                <button class="btn btn-success" type="submit">Add Campground</button>
+            <% if(currentUser && currentUser.role !== 'admin'){ %>
+            <div class="mb-3 d-flex justify-content-center">
+                <button class="btn btn-outline-primary shadow-sm w-100" type="submit">Add Campground</button>
             </div>
+            <%}%>
+
         </form>
-        <a href="/campgrounds">All Campgrounds</a>
+        <!-- <a href="/campgrounds">All Campgrounds</a> -->
     </div>
 </div>
 

@@ -11,4 +11,10 @@
     document.body.classList.toggle('dark-mode', darkSwitch.checked);
     localStorage.setItem('darkMode', darkSwitch.checked ? 'enabled' : 'disabled');
   });
+  
+
+
+
+
+
 
