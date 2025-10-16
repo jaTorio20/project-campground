@@ -42,13 +42,17 @@ module.exports.sendOTP = async (req, res) => {
       },
     });
 
-
-    await transporter.sendMail({
+  try {
+    const info = await transporter.sendMail({
       from: `"PinoyCamp" <${process.env.GMAIL_USER}>`,
       to: email,
       subject: 'Your OTP for PinoyCampground Registration',
       text: `Your OTP is: ${otp}. It expires in 10 minutes.`,
     });
+    console.log(' Mail sent:', info.response);
+    } catch (err) {
+      console.error(' Failed to send mail:', err);
+    }
 
     req.flash('success', 'OTP sent to your email. Please check.');
     return res.redirect('/verify-otp');
