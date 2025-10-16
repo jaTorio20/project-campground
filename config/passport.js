@@ -5,7 +5,23 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const User = require('../models/user');
 
 // Local Strategy
-passport.use(new LocalStrategy({ usernameField: 'email' }, User.authenticate())); 
+// passport.use(new LocalStrategy({ usernameField: 'email' }, User.authenticate())); 
+passport.use(new LocalStrategy({ usernameField: 'email' }, async (email, password, done) => {
+  try {
+    const user = await User.findOne({ email });
+    if (!user) return done(null, false, { message: 'Email not found' });
+
+    // Use Passport-Local-Mongoose authenticate method
+    user.authenticate(password, (err, thisUser, passwordError) => {
+      if (err) return done(err);
+      if (passwordError) return done(null, false, { message: 'Incorrect password' });
+      return done(null, thisUser);
+    });
+  } catch (err) {
+    return done(err);
+  }
+}));
+
 const callbackURL =
   process.env.NODE_ENV === 'production'
     ? "https://pinoycampground.onrender.com/auth/google/callback"

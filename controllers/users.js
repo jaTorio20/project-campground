@@ -33,12 +33,15 @@ module.exports.sendOTP = async (req, res) => {
 
     // Send email
     const transporter = nodemailer.createTransport({
-      service: 'Gmail',
+      host: 'smtp.gmail.com',
+      port: 587,        // TLS
+      secure: false,    // true for SSL (465), false for TLS (587)
       auth: {
         user: process.env.GMAIL_USER,
         pass: process.env.GMAIL_PASS,
       },
     });
+
 
     await transporter.sendMail({
       from: `"PinoyCamp" <${process.env.GMAIL_USER}>`,
@@ -137,16 +140,19 @@ module.exports.sendResetEmail = async (req, res) => {
 
     // Send email
     const transporter = nodemailer.createTransport({
-      service: 'Gmail',
+      host: 'smtp.gmail.com',
+      port: 587,        // TLS
+      secure: false,    // true for SSL (465), false for TLS (587)
       auth: {
         user: process.env.GMAIL_USER,
         pass: process.env.GMAIL_PASS,
       },
     });
-    // const protocol = process.env.NODE_ENV === 'production' ? 'https' : 'http';
+
+    // const resetURL = `http://${req.headers.host}/reset-password/${user._id}/${token}`;
+        // const protocol = process.env.NODE_ENV === 'production' ? 'https' : 'http';
     // const resetURL = `${protocol}://${req.headers.host}/reset-password/${user._id}/${token}`;
     const resetURL = `${process.env.BASE_URL}/reset-password/${user._id}/${token}`;
-
 
     await transporter.sendMail({
       to: user.email,

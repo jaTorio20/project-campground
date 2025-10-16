@@ -40,7 +40,7 @@ const dbURL = process.env.DB_URL || "mongodb://localhost:27017/campground";
 // })
 mongoose.connect(dbURL)
 .then(() => {
-  console.log(`Database connected to ${dbURL}`);
+  console.log(`Database connected`);
 })
 .catch((err) => {
   console.error("MongoDB connection error:", err);
