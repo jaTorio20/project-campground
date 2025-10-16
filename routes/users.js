@@ -5,16 +5,13 @@ const User = require('../models/user');
 const passport = require('passport');
 const { storeReturnTo } = require('../middleware');
 const users = require('../controllers/users');
-const {isAuthor, isLoggedIn} = require('../middleware')
+const {loginLimiter} = require('../controllers/users');
+const {validateCreateUser, isLoggedIn, validateResetPasswordUser} = require('../middleware')
 const upload = require('../middleware/upload');
-
-// router.route('/register')
-// .get( users.renderRegister)
-// .post( catchAsync(users.register))
 
 // User registration
 router.get('/register', users.renderRegister); 
-router.post('/register', catchAsync(users.sendOTP));
+router.post('/register', validateCreateUser, catchAsync(users.sendOTP));
 
 // Send OTP for email verification
 router.get('/verify-otp', users.renderOTPPage);          // show OTP form
@@ -25,13 +22,13 @@ router.get('/forgot-password', users.renderForgotPassword);
 router.post('/forgot-password', catchAsync(users.sendResetEmail));
 
 // Reset password
-router.get('/reset-password/:token', users.renderResetForm);
-router.post('/reset-password/:token', catchAsync(users.resetPassword));
+router.get('/reset-password/:id/:token', users.renderResetForm);
+router.post('/reset-password/:id/:token', validateResetPasswordUser, catchAsync(users.resetPassword));
 
 
 router.route('/login')
 .get(users.renderLogin)
-.post(storeReturnTo, passport.authenticate('local', {failureFlash: true, failureRedirect: '/login'}), users.login)
+.post(storeReturnTo, loginLimiter, passport.authenticate('local', {failureFlash: true, failureRedirect: '/login'}), users.login)
 
 router.get('/logout', users.logout);
 
@@ -59,13 +56,3 @@ router.post('/avatar', isLoggedIn, upload.single('avatar'), catchAsync(users.upl
 router.delete('/avatar', isLoggedIn, catchAsync(users.deleteAvatar));
 
 module.exports = router;
-
-// router.get('/register', users.renderRegister);
-
-// router.post('/register', catchAsync(users.register));
-
-// router.get('/login', users.renderLogin);
-
-// router.post('/login', storeReturnTo, passport.authenticate('local', {failureFlash: true, failureRedirect: '/login'}), users.login);
-
-// router.get('/logout', users.logout);

@@ -22,7 +22,7 @@
   //   }).required()
   // });
 
-  const BaseJoi = require('joi');
+const BaseJoi = require('joi');
 const sanitizeHtml = require('sanitize-html');
 
 const extension = (joi) => ({
@@ -63,3 +63,36 @@ module.exports.reviewSchema = Joi.object({
         body: Joi.string().required().escapeHTML()
     }).required()
 })
+
+module.exports.userSchema = Joi.object({
+    username: Joi.string().min(5).required().pattern(/^\S+$/, 'no spaces allowed').escapeHTML()
+    .min(5)
+    .max(30)
+    .messages({
+        'string.pattern.base': 'Username cannot contain spaces.'
+    }),
+    email:Joi.string().email().required().escapeHTML(),
+    password: Joi.string()
+    .required()
+    .pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$'))
+    .escapeHTML()
+    .min(1).max(30)
+    .messages({'string.pattern.base': 'Password must be at least 8 characters long and include uppercase, lowercase, and a number.'}),
+}).required()
+
+module.exports.userResetPasswordSchema = Joi.object({
+    password: Joi.string()
+    .required()
+    .pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$'))
+    .escapeHTML()
+    .min(1).max(30)
+    .messages({'string.pattern.base': 'Password must be at least 8 characters long and include uppercase, lowercase, and a number.'}),
+
+    confirmPassword: Joi.any()
+    .valid(Joi.ref('password'))
+    .required()
+    .messages({
+      'any.only': 'Passwords must match.',
+      'any.required': 'Please confirm your password.'
+    })
+}).required()

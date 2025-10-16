@@ -27,32 +27,47 @@ loadMoreBtn.addEventListener('click', async () => {
     }
 
     // Append new campgrounds
-for (let campground of campgrounds) {
-  const cardCol = document.createElement('div');
-  cardCol.className = 'mb-2 col-12 col-sm-10 col-lg-8';
+    for (let campground of campgrounds) {
+      const cardCol = document.createElement('div');
+      cardCol.className = 'mb-3 col-12 col-sm-10 col-lg-6';
 
-  const card = document.createElement('div');
-  card.className = 'card';
+      const card = document.createElement('div');
+      card.className = 'card card-index border-0 h-100';
 
-  card.innerHTML = `
-    <div class="card-body">
-      <h5 class="card-title">${campground.title}</h5>
-      <p class="card-text">${campground.description}</p>
-      <p class="card-text"><small>${campground.location}</small></p>
-    </div>
+      const authorName = campground.author?.username || 'Unknown';
+      const authorAvatar = campground.author?.avatar?.url || '/images/default-profile-icon.png';
+      const createdAt = campground.createdAt
+        ? moment(campground.createdAt).tz('Asia/Manila').format('MMMM D, YYYY, h:mm A')
+        : '';
 
-    <div class="campground-image-wrapper bg-dark">
-      <img src="${campground.images?.[0]?.url || '/images/default.jpg'}" class="campground-img" alt="Campground image">
-    </div>
+      card.innerHTML = `
+        <div class="card-body">
+          <div class="d-flex align-items-center">
+            <img src="${authorAvatar}" class="rounded-circle border border-1 border-tertiary uploadAvatarImg" alt="Author avatar">
+            <div class="ms-2">
+              <span class="fw-semibold">${authorName}</span><br>
+              <small class="text-muted">Created on: ${createdAt}</small>
+            </div>
+          </div>
 
-    <div class="d-flex justify-content-center p-5">
-      <a href="/campgrounds/${campground._id}" class="btn btn-outline-primary w-50 shadow-sm">View</a>
-    </div>
-  `;
+          <h5 class="card-title mt-3">${campground.title}</h5>
+          <p class="card-text mb-1"><small><strong>Location:</strong> ${campground.location}</small></p>
+          <p class="card-text text-muted">${campground.description}</p>
+        </div>
 
-  cardCol.appendChild(card);
-  campgroundList.appendChild(cardCol);
-}
+        <div class="campground-image-wrapper">
+          <img src="${campground.images?.[0]?.url || '/images/default.jpg'}" class="campground-img rounded-bottom" alt="Campground image">
+        </div>
+
+        <div class="d-flex justify-content-center pb-4 mt-4">
+          <a href="/campgrounds/${campground._id}" class="btn btn-outline-primary w-50">View</a>
+        </div>
+      `;
+
+      cardCol.appendChild(card);
+      campgroundList.appendChild(cardCol);
+    }
+
 
     loadMoreBtn.dataset.page = page;
   } catch (err) {

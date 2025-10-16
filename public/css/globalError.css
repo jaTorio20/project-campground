@@ -1,0 +1,30 @@
+.global-error {
+  background-color: #f8f9fa;
+  transition: all 0.3s ease;
+}
+
+
+.error-stack {
+  padding: 12px;
+
+  text-align: left;
+  overflow-x: auto;
+  font-family: "JetBrains Mono", monospace;
+}
+
+.error-img {
+  width: clamp(240px, 70vw, 500px);
+  height: auto;
+}
+
+/* Dark mode version */
+body.dark-mode .global-error {
+  background-color: #121212;
+  border-color: #333;
+  color: #ffffff;
+}
+
+body.dark-mode .error-stack {
+  background-color: #2f3031;
+  color: #ccc;
+}

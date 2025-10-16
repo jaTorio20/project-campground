@@ -3,6 +3,8 @@ const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 const cloudinary = require('../cloudinary');
 const fs = require('fs');
+const rateLimit = require('express-rate-limit');
+const bcrypt = require('bcrypt');
 
 module.exports.renderRegister = (req, res) => {
   res.render('users/register');
@@ -20,7 +22,7 @@ module.exports.sendOTP = async (req, res) => {
     }
     if (await User.findOne({ email })) {
       req.flash('error', 'Email is already registered.');
-      return res.redirect('/login');
+      return res.redirect('/register');
     }
 
     // Generate 6-digit OTP
@@ -120,9 +122,18 @@ module.exports.sendResetEmail = async (req, res) => {
 
     // Generate token and set expiry (1 hour)
     const token = crypto.randomBytes(20).toString('hex');
-    user.resetPasswordToken = token;
+
+    async function hashPassword(plainPassword) {
+      const saltRounds = 10; 
+      const hashedPassword = await bcrypt.hash(plainPassword, saltRounds);
+      return hashedPassword;
+    }
+
+    const hashedToken = await hashPassword(token);
+    user.resetPasswordToken = hashedToken;
     user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
     await user.save();
+    
 
     // Send email
     const transporter = nodemailer.createTransport({
@@ -133,7 +144,7 @@ module.exports.sendResetEmail = async (req, res) => {
       },
     });
 
-    const resetURL = `https://${req.headers.host}/reset-password/${token}`;
+    const resetURL = `http://${req.headers.host}/reset-password/${user._id}/${token}`;
 
     await transporter.sendMail({
       to: user.email,
@@ -157,31 +168,28 @@ module.exports.sendResetEmail = async (req, res) => {
 
 //############################### - RESET PASSWORD
 module.exports.renderResetForm = async (req, res) => {
-  const { token } = req.params;
-  const user = await User.findOne({
-    resetPasswordToken: token,
-    resetPasswordExpires: { $gt: Date.now() }, // token not expired
-  });
+  const { id, token } = req.params;
 
-  if (!user) {
+  const user = await User.findById(req.params.id);
+  const match  = await bcrypt.compare(token, user.resetPasswordToken);
+  
+  if (!match) {
     req.flash('error', 'Password reset token is invalid or has expired.');
     return res.redirect('/forgot-password');
   }
 
-  return res.render('users/reset-password', { token }); // create EJS template
+  return res.render('users/reset-password', { id, token });
 };
 
 module.exports.resetPassword = async (req, res, next) => {
   try {
-    const { token } = req.params;
+    const { token} = req.params;
     const { password } = req.body;
 
-    const user = await User.findOne({
-      resetPasswordToken: token,
-      resetPasswordExpires: { $gt: Date.now() },
-    });
+    const user = await User.findById(req.params.id);
+    const match  = await bcrypt.compare(token, user.resetPasswordToken);
 
-    if (!user) {
+    if (!match) {
       req.flash('error', 'Password reset token is invalid or has expired.');
       return res.redirect('/forgot-password');
     }
@@ -204,47 +212,20 @@ module.exports.resetPassword = async (req, res, next) => {
 };
 
 
-// module.exports.register = async(req, res, next) => {
-//   try{
-//   const {username, email, password} = req.body;
-
-//   const existingUsername = await User.findOne({ username });
-//     if (existingUsername) {
-//       req.flash('error', 'Username is already taken. Please choose another one.');
-//       return res.redirect('/register');
-//     }
-
-//     // Check if email already exists
-//     const existingEmail = await User.findOne({ email });
-//     if (existingEmail) {
-//       req.flash('error', 'Email is already registered. Please log in instead.');
-//       return res.redirect('/login');
-//     }
-
-//   const user = new User({
-//     username,
-//     email
-//   });
-//   const registeredUser = await User.register(user, password);
-//   req.login(registeredUser, err => {
-//     if(err) return next(err);
-//     req.flash('success', 'Welcome to Campground!');
-//     res.redirect('/campgrounds');
-//   });
-//   }catch(e){  
-//   if (e.code === 11000) {
-//     req.flash('error', 'That username or email is already in use.');
-//     return res.redirect('/register');
-//   }
-
-//     req.flash('error', e.message); //Libraries like Mongoose, Passport, etc., throw errors that extend Error and include .message.
-//     res.redirect('register');
-//   }
-// }
+module.exports.loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 12,
+  handler: (req, res) => {
+    req.flash('error', 'Too many login attempts. Please try again after 15 minutes.');
+    return res.redirect('/login');
+  }
+});
 
 module.exports.renderLogin = (req, res) => {
   return res.render('users/login');
-}
+};
+
+
 
 module.exports.login = (req, res) => {
   req.flash('success', 'Welcomeback!');
@@ -305,10 +286,6 @@ module.exports.uploadAvatar = async (req, res) => {
     req.flash('success', 'Profile picture updated!');
     return res.redirect('/campgrounds');
 
-    // console.error('Avatar upload failed:', err);
-    // req.flash('error', 'Failed to upload profile picture.');
-    // res.redirect('/campgrounds');
-
 };
 
 module.exports.deleteAvatar = async (req, res) => {
@@ -333,7 +310,7 @@ module.exports.deleteAvatar = async (req, res) => {
     await user.save();
 
     req.flash('success', 'Profile picture removed');
-    res.redirect('/campgrounds');
+    return res.redirect('/campgrounds');
 
 };
 

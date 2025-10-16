@@ -1,16 +1,48 @@
-<% if(success && success.length){ %>
-<div class="alert alert-success alert-dismissible fade show" role="alert">
-  <%=success %>
-  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-</div>
-<% }%>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+    // Detect dark mode
+    const isDarkMode = document.body.classList.contains('dark-mode') || localStorage.getItem('darkMode') === 'enabled';
 
-<!-- if error exists && error array is not empty -->
-<% if(error && error.length){ %>  
-<div class="alert alert-danger alert-dismissible fade show" role="alert">
-  <%=error %>
-  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-</div>
-<% }%>
+    <% if (success && success.length) { %>
+      Toastify({
+        text: "<%= success %>",
+        duration: 2500,
+        gravity: "top", 
+        position: "right",
+        close: true,
+        stopOnFocus: true,
+        backgroundColor: isDarkMode ? "#2c2c2c" :  "#ffffff",
+        style: {
+          borderRadius: "8px",
+          color: isDarkMode ? "#8cff7e" : "#008000",
+          fontWeight: "400"
+          
+        }
+      }).showToast();
+    <% } %>
 
-<!-- [{'success': 'it worked', 'danger': 'error'}] -->
+  <% if (error && error.length) { %>
+
+    Toastify({
+      text: "<%= error %>",
+      duration: 3000, 
+      gravity: "top",
+      position: "right",
+      close: true,
+      stopOnFocus: true,
+      backgroundColor: isDarkMode? "#2c2c2c" : "#ffffff",
+      className: "modern-toast",       
+      style: {
+        borderRadius: "12px",          
+        color: isDarkMode ? "#ff4d4f" : "#c4081b", 
+        fontWeight: "400",
+        fontSize: "14px",
+        boxShadow: isDarkMode ?  "0 4px 12px rgba(255, 255, 255, 0.2)"  : "0 4px 12px rgba(0, 0, 0, 0.15)", // subtle shadow
+        border: "none",             
+        padding: "12px 20px",
+        minWidth: "200px"
+      }
+    }).showToast();
+  <% } %>
+  });
+</script>

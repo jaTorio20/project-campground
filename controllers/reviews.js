@@ -4,12 +4,14 @@ const Review = require('../models/review');
 module.exports.createReview = async(req, res) => {
   const campground = await Campground.findById(req.params.id);
   const review = new Review(req.body.review);
+
   review.author = req.user._id;
   campground.reviews.push(review);
-  await review.save();
-  await campground.save();
-    req.flash('success', 'Successfully created campground!');
-  res.redirect(`/campgrounds/${campground._id}`);
+    await review.save();
+    await campground.save();
+
+  req.flash('success', 'Successfully created review!');
+  return res.redirect(`/campgrounds/${campground._id}`);
 }
 
 module.exports.deleteReview = async (req, res) => {
@@ -17,5 +19,5 @@ module.exports.deleteReview = async (req, res) => {
   await Campground.findByIdAndUpdate(id, {$pull: {reviews: reviewId}});//removing campground.reviews arrays contains in that review model
   await Review.findByIdAndDelete(reviewId);//if Review was removed then id associated with
   req.flash('success', 'Review Deleted successfully!');
-  res.redirect(`/campgrounds/${id}`); //Campground.reviews will be removed, as well
+  return res.redirect(`/campgrounds/${id}`); //Campground.reviews will be removed, as well
 }

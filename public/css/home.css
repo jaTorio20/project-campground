@@ -1,36 +1,158 @@
 body {
-    height: 100vh;
-    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5));
-    /* url("https://images.unsplash.com/photo-1559521783-1d1599583485?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80"); */
-    background-size: cover;
-    background-position: center;
-    text-shadow: 0 0.05rem 0.1rem rgba(0, 0, 0, 0.5);
-    box-shadow: inset 0 0 5rem rgba(0, 0, 0, 0.5);
+  background-color: #f8f9fa;
+  color: #212529; 
 }
-.cover-container {
-  max-width: 60vw;
+
+/* ########################  Navbar */
+.navbar {
+  background-color: #ffffff; 
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.navbar-brand {
+  font-weight: 500;
+  font-size: 1.5rem;
+  color: #212529 !important;
 }
 
 .nav-link {
-    padding: 0.25rem 0;
-    font-weight: 500;
-    color: rgba(255,255,255,0.5);
-    margin-left: 1rem;
-    border-bottom: 0.15rem solid transparent;
+  color: #212529 !important;
+  transition: color 0.3s ease;
 }
 
-.nav-link:hover{
-    color: rgba(255,255,255,0.5);
-    border-bottom-color:rgba(255,255,255,0.5);
-}
-
+.nav-link:hover,
 .nav-link.active {
-    color: white;
-    border-bottom-color:white;
+  color: #0d6efd !important;
+}
+
+.card {
+  background-color: #ffffff;
+  color: #212529;
+  border: 1px solid #dee2e6;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* ############################ NAVBAR FOOTER */
+footer {
+  background-color: #ffffff;
+  color: #6c757d;
+}
+
+.footer-text {
+  color: inherit;
+  text-decoration: none;
+}
+
+.footer-text:hover {
+  text-decoration: underline;
+}
+
+/* ########################### DARK MODE SWITCH */
+.custom-switch {
+  position: relative;
+  width: 48px;
+  height: 26px;
+  background-color: #e9ecef;
+  border-radius: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 4px;
+  transition: background-color 0.3s ease;
+}
+
+.custom-switch .sun-icon,
+.custom-switch .moon-icon {
+  font-size: 14px;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* light mode */
+.custom-switch .moon-icon {
+  opacity: 0;
+  color: #f8f400;
+   text-shadow: 0 0px 3px rgba(201, 164, 0, 0.7);
+}
+
+/* When toggled */
+#darkModeSwitch:checked + .custom-switch {
+  background-color: #4e4e4e;
+}
+
+#darkModeSwitch:checked + .custom-switch .sun-icon {
+  opacity: 0;
 
 }
 
-.btn-secondary, .btn-secondary:hover{
-    color: #333;
-    text-shadow: none;
+#darkModeSwitch:checked + .custom-switch .moon-icon {
+  opacity: 1;
+
+}
+
+
+
+/* ####################### HOMEPAGE MAIN */
+.hero-section {
+  min-height: 90vh;
+  background-color: #f8f9fa;
+ 
+  overflow: hidden;
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+.hero-title {
+  color: #212529;
+  letter-spacing: 1px;
+}
+
+.hero-text {
+  color: #6c757d;
+  line-height: 1.7;
+}
+
+.hero-btn {
+  border-color: #212529;
+  color: #212529;
+  transition: all 0.3s ease;
+}
+
+.hero-btn:hover {
+  background-color: #212529;
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+
+/* ############# --- DARK MODE --- */
+body.dark-mode .hero-section {
+  background-color: #121212;
+}
+
+body.dark-mode .hero-section::before {
+  opacity: 0.1;
+}
+
+body.dark-mode .hero-title {
+  color: #f5f6f7;
+}
+
+body.dark-mode .hero-text {
+  color: #c9cbcf;
+}
+
+body.dark-mode .hero-btn {
+  border-color: #e4e6eb;
+  color: #e4e6eb;
+}
+
+body.dark-mode .hero-btn:hover {
+  background-color: #e4e6eb;
+  color: #18191A;
+  transform: translateY(-2px);
 }

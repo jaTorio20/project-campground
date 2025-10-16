@@ -3,15 +3,15 @@ const router = express.Router( {mergeParams: true} ); //so that in app.js and th
 const Campground = require('../models/campground');
 const Review = require('../models/review');
 const reviews = require('../controllers/reviews')
-const {validateReview, isLoggedIn, isReviewAuthor} = require('../middleware')
+const {validateReview, isLoggedIn, isReviewAuthor, isAdmin, isNotAdmin} = require('../middleware')
 // const {reviewSchema} = require('../schemas');
 const catchAsync = require('../utils/catchAsync');
 // const ExpressError = require('../utils/ExpressError');
 
 
 
-router.post('/', validateReview, isLoggedIn, catchAsync(reviews.createReview));
+router.post('/', validateReview, isLoggedIn, isNotAdmin, catchAsync(reviews.createReview));
 
-router.delete('/:reviewId', isLoggedIn, isReviewAuthor, catchAsync(reviews.deleteReview));
+router.delete('/:reviewId', isLoggedIn, isReviewAuthor, isAdmin, catchAsync(reviews.deleteReview));
 
 module.exports = router;
