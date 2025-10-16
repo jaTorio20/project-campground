@@ -143,8 +143,10 @@ module.exports.sendResetEmail = async (req, res) => {
         pass: process.env.GMAIL_PASS,
       },
     });
+    // const protocol = process.env.NODE_ENV === 'production' ? 'https' : 'http';
+    // const resetURL = `${protocol}://${req.headers.host}/reset-password/${user._id}/${token}`;
+    const resetURL = `${process.env.BASE_URL}/reset-password/${user._id}/${token}`;
 
-    const resetURL = `http://${req.headers.host}/reset-password/${user._id}/${token}`;
 
     await transporter.sendMail({
       to: user.email,
