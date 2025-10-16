@@ -8,7 +8,7 @@ const User = require('../models/user');
 passport.use(new LocalStrategy({ usernameField: 'email' }, User.authenticate())); 
 const callbackURL =
   process.env.NODE_ENV === 'production'
-    ? "https://pinoy-campground.onrender.com/auth/google/callback"
+    ? "https://pinoycampground.onrender.com/auth/google/callback"
     : "http://localhost:3000/auth/google/callback";
 
 // --- Google Strategy ---
