@@ -237,10 +237,16 @@ cron.schedule('0 */6 * * *', () => {
 
 
 const port = process.env.PORT || 3000;
-app.listen(port, async (req, res) => {
+app.listen(port, () => {
 
   if (process.env.NODE_ENV !== 'production') {
     console.log(`LISTENING TO PORT ${port}`);
   }
 
+});
+
+const port = process.env.PORT || 3000;
+
+app.listen(port, () => {
+  console.log(`Server running on port ${port} in ${process.env.NODE_ENV || 'development'} mode`);
 });
