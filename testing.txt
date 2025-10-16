@@ -1,0 +1,154 @@
+module.exports.sendOTP = async (req, res) => {
+  try {
+    const { username, email, password } = req.body;
+
+    // Check for duplicates
+    if (await User.findOne({ username })) {
+      req.flash('error', 'Username is already taken.');
+      return res.redirect('/register');
+    }
+    if (await User.findOne({ email })) {
+      req.flash('error', 'Email is already registered.');
+      return res.redirect('/register');
+    }
+
+    // Generate 6-digit OTP
+    const otp = crypto.randomInt(100000, 999999).toString();
+
+    // Store data in session
+    req.session.registerData = { username, email, password, otp, createdAt: Date.now() };
+
+   
+    const oauth2Client = new google.auth.OAuth2(
+      process.env.GOOGLE_CLIENT_ID,
+      process.env.GOOGLE_CLIENT_SECRET,
+      "https://developers.google.com/oauthplayground"
+    );
+    oauth2Client.setCredentials({ refresh_token: process.env.GMAIL_REFRESH_TOKEN });
+
+    const accessToken = await oauth2Client.getAccessToken();
+
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        type: 'OAuth2',
+        user: process.env.FROM_EMAIL,          
+        clientId: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        refreshToken: process.env.GMAIL_REFRESH_TOKEN,
+        accessToken: accessToken.token,
+      },
+    });
+
+    await transporter.sendMail({
+      from: `"PinoyCampground" <${process.env.FROM_EMAIL}>`,
+      to: email,
+      subject: 'Your OTP for PinoyCampground Registration',
+      html: `
+        <div style="font-family: Arial, sans-serif; padding:20px; background:#f4f6f8;">
+          <h2 style="color:#2e7d32; text-align:center;">PinoyCampground OTP</h2>
+          <p style="text-align:center;">Use the following One-Time Password (OTP) to complete your registration.</p>
+          <div style="text-align:center; font-size:24px; font-weight:bold; color:#2e7d32; margin:20px 0;">
+            ${otp}
+          </div>
+          <p style="text-align:center; font-size:14px; color:#555;">Valid for 10 minutes. If you didn’t request this, ignore this email.</p>
+        </div>
+      `
+    });
+   
+
+    req.flash('success', 'OTP sent to your email. Please check.');
+    return res.redirect('/verify-otp');
+
+  } catch (e) {
+    req.flash('error', e.message);
+    return res.redirect('/register');
+  }
+};
+
+module.exports.sendResetEmail = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) {
+      req.flash('error', 'No account found with that email.');
+      return res.redirect('/forgot-password');
+    }
+
+    // Generate token and set expiry (1 hour)
+    const token = crypto.randomBytes(20).toString('hex');
+
+    async function hashPassword(plainPassword) {
+      const saltRounds = 10; 
+      const hashedPassword = await bcrypt.hash(plainPassword, saltRounds);
+      return hashedPassword;
+    }
+
+    const hashedToken = await hashPassword(token);
+    user.resetPasswordToken = hashedToken;
+    user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+    await user.save();
+
+    // ---- Gmail API setup ----
+    const oauth2Client = new google.auth.OAuth2(
+      process.env.GOOGLE_CLIENT_ID,
+      process.env.GOOGLE_CLIENT_SECRET,
+      "https://developers.google.com/oauthplayground"
+    );
+    oauth2Client.setCredentials({ refresh_token: process.env.GMAIL_REFRESH_TOKEN });
+    const accessToken = await oauth2Client.getAccessToken();
+
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        type: 'OAuth2',
+        user: process.env.FROM_EMAIL,           // e.g., johntorio2422@gmail.com
+        clientId: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        refreshToken: process.env.GMAIL_REFRESH_TOKEN,
+        accessToken: accessToken.token,
+      },
+    });
+
+    const resetURL = `${process.env.BASE_URL}/reset-password/${user._id}/${token}`;
+
+    await transporter.sendMail({
+      from: `"${process.env.FROM_NAME}" <${process.env.FROM_EMAIL}>`,
+      to: user.email,
+      subject: 'Reset Your PinoyCampground Password',
+      html: `
+        <div style="font-family: Arial, sans-serif; padding:20px; background:#f4f6f8;">
+          <h2 style="color:#2e7d32; text-align:center;">PinoyCampground Password Reset</h2>
+          <p style="text-align:center;">You requested a password reset. Click the button below to reset your password:</p>
+          <div style="text-align:center; margin:20px 0;">
+            <a href="${resetURL}" style="
+              display:inline-block;
+              padding:12px 24px;
+              background-color:#2e7d32;
+              color:#fff;
+              text-decoration:none;
+              border-radius:6px;
+              font-weight:bold;
+            ">Reset Password</a>
+          </div>
+          <p style="text-align:center; font-size:14px; color:#555;">
+            This link will expire in 1 hour.<br>
+            If you didn’t request this, you can ignore this email.
+          </p>
+          <hr style="margin:25px 0; border:none; border-top:1px solid #eee;">
+          <p style="text-align:center; font-size:12px; color:#999;">
+            &copy; ${new Date().getFullYear()} John Ashley Torio. 
+            <a href="https://pinoycampground.onrender.com/" style="color:#2e7d32; text-decoration:none;">Visit our site</a>
+          </p>
+        </div>
+      `
+    });
+
+    req.flash('success', 'Password reset email sent. Please check your inbox.');
+    return res.redirect('/login');
+
+  } catch (e) {
+    req.flash('error', e.message);
+    return res.redirect('/forgot-password');
+  }
+};

@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@mapbox/mapbox-sdk": "^0.16.2",
+    "axios": "^1.12.2",
     "bcrypt": "^6.0.0",
     "bootstrap-icons": "^1.13.1",
     "cloudinary": "^2.7.0",

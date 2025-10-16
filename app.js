@@ -186,9 +186,12 @@ app.use('/', userRoutes);
 app.use('/campgrounds', campgroundRoutes);
 app.use('/campgrounds/:id/reviews', reviewRoutes);
 
-// app.get('/', (req, res) => {
-//   res.render('home');
-// });
+app.get('/privacy', (req, res) => {
+  res.render('privacy');
+});
+app.get('/terms', (req, res) => {
+  res.render('terms');
+});
 
 
 const tempDir = path.join(process.cwd(), 'temp');
