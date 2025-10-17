@@ -64,8 +64,9 @@ app.use('/bootstrap-icons', express.static(__dirname + '/node_modules/bootstrap-
 
 app.use(sanitizeV5({ replaceWith: '_' })); //
 
-const secret = process.env.SECRET;
+app.set('trust proxy', 1); 
 
+const secret = process.env.SECRET;
 const store = MongoStore.create({
     mongoUrl: dbURL,
     touchAfter: 24 * 60 * 60, //only update once per day
