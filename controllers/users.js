@@ -48,7 +48,6 @@ module.exports.sendOTP = async (req, res) => {
       req.flash('success', 'OTP sent to your email. Please check.');
     } else {
       req.flash('error', 'Failed to send OTP. Please try again.');
-      return res.redirect('/register'); //remove if not work
     }
 
     return res.redirect('/verify-otp');
@@ -175,10 +174,10 @@ module.exports.sendResetEmail = async (req, res) => {
       html });
 
     if (sent) {
-      req.flash('success', 'Password reset email sent. Please check your inbox.');
+      req.flash('success', 'Password reset email sent. Please check your inbox/spam.');
     } else {
       req.flash('error', 'Failed to send password reset email. Please try again.');
-      return res.redirect('/forgot-password'); //optional redirect
+      return res.redirect('/login');
     }
 
     return res.redirect('/login');
