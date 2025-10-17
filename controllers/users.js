@@ -39,16 +39,21 @@ module.exports.sendOTP = async (req, res) => {
       </div>
     `;
 
-    const sent = await sendEmail({ to: email, subject: 'Your OTP for PinoyCampground Registration', html });
+    const sent = await sendEmail({
+       to: email, 
+       subject: 'Your OTP for PinoyCampground Registration', 
+       html });
 
     if (sent) {
       req.flash('success', 'OTP sent to your email. Please check.');
     } else {
       req.flash('error', 'Failed to send OTP. Please try again.');
+      return res.redirect('/register'); //remove if not work
     }
 
     return res.redirect('/verify-otp');
   } catch (e) {
+    console.error("sendOTP error:", e);
     req.flash('error', e.message);
     return res.redirect('/register');
   }
@@ -128,22 +133,52 @@ module.exports.sendResetEmail = async (req, res) => {
     const resetURL = `${process.env.BASE_URL}/reset-password/${user._id}/${token}`;
 
     const html = `
-      <div style="font-family: Arial, sans-serif; padding:20px; background:#f4f6f8;">
-        <h2 style="color:#2e7d32; text-align:center;">PinoyCampground Password Reset</h2>
-        <p style="text-align:center;">You requested a password reset. Click the button below to reset your password:</p>
-        <div style="text-align:center; margin:20px;">
-          <a href="${resetURL}" style="padding:12px 20px; background:#2e7d32; color:white; text-decoration:none; border-radius:6px;">Reset Password</a>
+      <div style="
+        font-family: Arial, sans-serif; 
+        padding:20px; 
+        background:#f4f6f8;">
+          <h2 style="
+          color:#2e7d32; 
+          text-align:center;
+          ">
+            PinoyCampground Password Reset
+          </h2>
+            <p style="
+              text-align:center;">
+                You requested a password reset. Click the button below to reset your password:
+            </p>
+              <div style="
+                text-align:center; 
+                margin:20px;">
+                <a href="${resetURL}" style="
+                  padding:12px 20px; 
+                  background:#2e7d32; 
+                  color:white; 
+                  text-decoration:none; 
+                  border-radius:6px;">
+                    Reset Password
+                </a>
+              </div>
+
+              <p style="
+                text-align:center; 
+                font-size:14px; 
+                color:#555;">
+                  This link will expire in 1 hour. If you did not request this, ignore this email.
+              </p>
         </div>
-        <p style="text-align:center; font-size:14px; color:#555;">This link will expire in 1 hour. If you didn’t request this, ignore this email.</p>
-      </div>
     `;
 
-    const sent = await sendEmail({ to: user.email, subject: 'Password Reset for PinoyCampground', html });
+    const sent = await sendEmail({ 
+      to: user.email, 
+      subject: 'Password Reset for PinoyCampground', 
+      html });
 
     if (sent) {
       req.flash('success', 'Password reset email sent. Please check your inbox.');
     } else {
       req.flash('error', 'Failed to send password reset email. Please try again.');
+      return res.redirect('/forgot-password'); //optional redirect
     }
 
     return res.redirect('/login');
