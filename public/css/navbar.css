@@ -109,14 +109,72 @@ body.dark-mode .tooltip .tooltip-inner {
     color: #E4E6EB;
   }
 
-
-body.dark-mode .navbar-toggler {
-  border-color: #B0B3B8; 
+  /* ########################### NAVBAR TOGGLER */
+  .navbar-toggler,
+  .navbar-toggler:focus,
+  .navbar-toggler:active {
+    border: none !important;
+    box-shadow: none !important;
+    outline: none !important;
 }
 
-body.dark-mode .navbar-toggler-icon {
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(224, 225, 226, 0.8)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+/* Base style custom toggler */
+.custom-toggler {
+  width: 26px;
+  height: 30px;
+  position: relative;
+  transition: all 0.3s ease;
+  outline: none;
+  box-shadow: none;
+  background: transparent;
 }
+
+/* Bar hamburger */
+.toggler-icon {
+  position: absolute;
+  height: 1px;
+  width: 100%;
+  left: 0;
+  background-color: #212529;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+/*three bars Positioning */
+.top-bar {
+  top: 6px;
+}
+.middle-bar {
+  top: 14px;
+}
+.bottom-bar {
+  top: 22px;
+}
+
+/* If navbar is open */
+.custom-toggler[aria-expanded="true"] .top-bar {
+  transform: rotate(45deg);
+  top: 14px;
+  
+}
+.custom-toggler[aria-expanded="true"] .middle-bar {
+  opacity: 0;
+}
+.custom-toggler[aria-expanded="true"] .bottom-bar {
+  transform: rotate(-45deg);
+  top: 14px;
+}
+
+
+/* Dark Mode Styles for toggling  */
+body.dark-mode .toggler-icon {
+  background-color: #e0e1e2;
+}
+
+body.dark-mode .custom-toggler {
+  border-color: #b0b3b8;
+}
+
 
 body.dark-mode .mapbox-popup,
 .mapbox-popup {

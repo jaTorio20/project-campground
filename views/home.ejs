@@ -17,35 +17,58 @@
   <nav class="navbar navbar-expand-md navbar-light sticky-top">
     <div class="container-fluid">
       <a class="navbar-brand" href="#">PinoyCampground</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+
+    <button
+      class="navbar-toggler border-0 custom-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNav"
+      aria-controls="navbarNavDropdown"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="toggler-icon top-bar"></span>
+      <span class="toggler-icon middle-bar"></span>
+      <span class="toggler-icon bottom-bar"></span>
+    </button>
 
       <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-        <ul class="navbar-nav">
-        <!-- Dark Mode Toggle -->
-            <div class=" d-flex align-items-center ">
-                <input class="form-check-input visually-hidden" type="checkbox" id="darkModeSwitch">
-                <label for="darkModeSwitch" class="custom-switch ">
-                    <i class="bi bi-sun-fill sun-icon"></i>
-                    <i class="bi bi-moon-fill moon-icon"></i>
-                </label>
-            </div>
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link " href="/campgrounds">Campgrounds</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/campgrounds/new">New Campgrounds</a>
+            </li>
+          </ul>
 
-          <li class="nav-item"><a class="nav-link active" href="#">Home</a></li>
-          <li class="nav-item"><a class="nav-link" href="/campgrounds">Campgrounds</a></li>
-
-          
-
-          
-          <% if(!currentUser){ %>
-            <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
-            <li class="nav-item"><a class="nav-link" href="/register">Register</a></li>
-          <% } else { %>
-            <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
-          <% } %>
+          <ul class="navbar-nav ms-auto">         
+            <% if(!currentUser){ %>
+              <!-- Dark Mode Toggle -->
+              <div class=" d-flex align-items-center ">
+                  <input class="form-check-input visually-hidden" type="checkbox" id="darkModeSwitch">
+                  <label for="darkModeSwitch" class="custom-switch ">
+                      <i class="bi bi-sun-fill sun-icon"></i>
+                      <i class="bi bi-moon-stars moon-icon"></i>
+                  </label>
+              </div>
+              <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
+              <li class="nav-item"><a class="nav-link" href="/register">Register</a></li>
+            <% } else { %>
+              <div class=" d-flex align-items-center ">
+                  <input class="form-check-input visually-hidden" type="checkbox" id="darkModeSwitch">
+                  <label for="darkModeSwitch" class="custom-switch ">
+                      <i class="bi bi-sun-fill sun-icon"></i>
+                      <i class="bi bi-moon-stars moon-icon"></i>
+                  </label>
+              </div>
+              <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
+            <% } %>
         </ul>
+
       </div>
     </div>
   </nav>

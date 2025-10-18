@@ -71,7 +71,7 @@ text-decoration-line: none;
 
 
 /* ****** campground/show  ***** */
-.campground-image-wrapper {
+.show-campground-image-wrapper {
   width: 100%;
   height: 400px;
   overflow: hidden;

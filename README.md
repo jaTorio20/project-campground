@@ -46,6 +46,11 @@ This application requires several external services. Set up accounts for the fol
 - Use your Gmail account or create a new one
 - Enable 2-factor authentication
 - Generate an App Password for the application
+   **Or**
+   [Gmail service sender by Brevo]
+- Use brevo account
+- Get brevo api key
+- Get brevo domain or own verified email at brevo
 
 ### 5. Mapbox (Maps)
 - Create account at [Mapbox](https://www.mapbox.com/)
@@ -87,6 +92,10 @@ GOOGLE_CLIENT_SECRET=your-google-client-secret
 # Gmail Configuration
 GMAIL_USER=your-gmail-address@gmail.com
 GMAIL_PASS=your-gmail-app-password
+ **Or**
+ Brevo Configuration
+ BREVO_API_KEY=yourBrevoApiKey
+ BREVO_SENDER_EMAIL=yourbrevo@gmail.com
 
 # Mapbox Token
 MAPBOX_TOKEN=your-mapbox-access-token
@@ -217,6 +226,9 @@ NODE_ENV=production npm start
    - Ensure Gmail 2FA is enabled
    - Use App Password instead of regular password
    - Check Gmail credentials in .env
+   **Using Brevo for Email Sender**
+   -Ensure API key is correct
+   -Ensure gmail registered with Brevo
 
 4. **Maps Not Loading**
    ```
