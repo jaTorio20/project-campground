@@ -57,7 +57,7 @@ module.exports.createCampground = async (req, res, next) => {
       }
     } finally {
       try{
-        await fs.promises.unlink(file.path); // cleanup temp file
+        await fs.promises.unlink(file.path); 
       }catch{
         if (process.env.NODE_ENV !== 'production') {
         console.error('Async delete failed:', err);
