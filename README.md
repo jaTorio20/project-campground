@@ -329,4 +329,4 @@ If you encounter any issues during testing:
 
 ---
 
-**Note**: This application is designed for educational and demonstration purposes. For production use, additional security measures and optimizations would be recommended.
+**Note**: This application is designed for educational and demonstration purposes.It is intended for Personal projects only.
