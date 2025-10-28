@@ -59,14 +59,24 @@ module.exports.validateResetPasswordUser = (req, res, next) => {
 }
 
 module.exports.isAuthor = async (req, res, next) => {
-  const {id} = req.params;
+  const { id } = req.params;
   const campground = await Campground.findById(id);
-  if ((!campground.author || !campground.author.equals(req.user._id)) && req.user.role !== 'admin') {
+
+  if (!campground) {
+    req.flash('error', "Campground not found");
+    return res.redirect('/campgrounds');
+  }
+
+  const authorId = campground.author._id ? campground.author._id : campground.author;
+
+  if (!(authorId.equals(req.user._id) || req.user.role === 'admin')) {
     req.flash('error', "You don't have permission");
     return res.redirect(`/campgrounds/${id}`);
-  } 
-    next();
-}
+  }
+
+  next();
+};
+
 
 module.exports.isReviewAuthor = async (req, res, next) => {
   const {id, reviewId} = req.params;
@@ -100,10 +110,10 @@ module.exports.isNotAdmin = (req, res, next) => {
 };
 
 
-module.exports.isAdmin = (req, res, next) => {
-  if (req.isAuthenticated() && req.user.role === 'admin') {
-    return next();
-  }
-  req.flash('error', 'You do not have permission to do that.');
-  res.redirect('/');
-};
+// module.exports.isAdmin = (req, res, next) => {
+//   if (req.isAuthenticated() && req.user.role === 'admin') {
+//     return next();
+//   }
+//   req.flash('error', 'You do not have permission to do that.');
+//   res.redirect('/');
+// };
